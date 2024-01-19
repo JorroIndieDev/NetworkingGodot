@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqn45aclajyjh"]
+
+[ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_2xwkr"]
+[ext_resource type="PackedScene" uid="uid://bcy21smmw4hc2" path="res://TestingScenes/test_level.tscn" id="2_6mryd"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2xwkr")
+scene = ExtResource("2_6mryd")
+PORT = 8910
+IP_ADRESS = &"192.168.56.1"
+MAX_CLIENTS = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_top = 362.0
+offset_right = 388.0
+offset_bottom = 648.0
+grow_vertical = 0
+
+[node name="Host" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Host Game"
+
+[node name="Join" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Join Game"
+
+[node name="Start" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -361.0
+offset_top = -128.5
+offset_bottom = 128.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2"]
+layout_mode = 2
+text = "TEST"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 0
+offset_top = 313.0
+offset_right = 267.0
+offset_bottom = 344.0
+placeholder_text = "ID / Name"
+
+[connection signal="pressed" from="VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]

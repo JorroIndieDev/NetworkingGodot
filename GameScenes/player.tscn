@@ -1,0 +1,230 @@
+[gd_scene load_steps=21 format=3 uid="uid://c3d46jqv5eejm"]
+
+[ext_resource type="PackedScene" uid="uid://ca5fuws85alxg" path="res://Models/Player/Y Bot.fbx" id="1_0aryk"]
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_ry55r"]
+[ext_resource type="Script" path="res://Scripts/PlayerStateMachine.gd" id="5_vx5xm"]
+[ext_resource type="Script" path="res://Scripts/StateMachine.gd" id="6_1yhs6"]
+[ext_resource type="AnimationLibrary" uid="uid://cxnfb4sodrljg" path="res://Models/Player/Animations/AdventurePackAnimations/PlayerAnimations.res" id="6_3gftg"]
+[ext_resource type="Script" path="res://Scripts/PlayerIdleState.gd" id="8_1twqs"]
+[ext_resource type="Script" path="res://Scripts/PlayerWalkingState.gd" id="9_dfbad"]
+[ext_resource type="Script" path="res://Scripts/PlayerSprintState.gd" id="9_r54yf"]
+[ext_resource type="Script" path="res://Scripts/PlayerAtackingState.gd" id="10_s6dwn"]
+[ext_resource type="Script" path="res://Scripts/PlayerFallingState.gd" id="11_yvgpv"]
+[ext_resource type="Script" path="res://Scripts/PlayerJumpState.gd" id="12_02ylv"]
+[ext_resource type="Script" path="res://Scripts/PlayerLandHardState.gd" id="12_f4m4h"]
+[ext_resource type="Script" path="res://Scripts/PlayerRecoverFallState.gd" id="13_2qixx"]
+[ext_resource type="Script" path="res://Scripts/PlayerLandingState.gd" id="13_yjpwx"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h7dws"]
+radius = 0.257951
+height = 1.8686
+
+[sub_resource type="Animation" id="Animation_uyv15"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../CollisionShape3D:shape:radius")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.257951]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../CollisionShape3D:shape:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.8686]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../CollisionShape3D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.9, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u0ocb"]
+_data = {
+"RESET": SubResource("Animation_uyv15")
+}
+
+[sub_resource type="AnimationRootNode" id="AnimationRootNode_m32bs"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ufwhi"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Model/Root Scene/AnimationPlayer:current_animation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bkfc4"]
+properties/0/path = NodePath(".:input_dir")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("animationPlayer")]
+collision_layer = 2
+script = ExtResource("1_ry55r")
+animationPlayer = NodePath("Model/Root Scene/AnimationPlayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_h7dws")
+
+[node name="Model" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0197727, 0)
+
+[node name="Root Scene" parent="Model" instance=ExtResource("1_0aryk")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Model/Root Scene/RootNode" index="0"]
+bones/0/position = Vector3(0.00102335, 0.928626, -0.00205295)
+bones/0/rotation = Quaternion(-0.0364684, -0.367101, -0.0132509, 0.929372)
+bones/1/rotation = Quaternion(-0.0102911, 0.0407326, -0.00618368, 0.999098)
+bones/2/rotation = Quaternion(0.100838, 0.0827382, -0.00882031, 0.991417)
+bones/3/rotation = Quaternion(0.157693, 0.0820917, -0.0135837, 0.983976)
+bones/4/rotation = Quaternion(-0.0347348, -0.0110164, 0.00202371, 0.999334)
+bones/5/rotation = Quaternion(-0.0544201, 0.176922, -0.0128666, 0.982635)
+bones/7/rotation = Quaternion(-0.498425, -0.517027, 0.571048, -0.397693)
+bones/8/rotation = Quaternion(0.522886, -0.0635163, 0.134325, 0.839353)
+bones/9/rotation = Quaternion(-0.0124498, 0.0578498, 0.404798, 0.91249)
+bones/10/rotation = Quaternion(-0.162826, 0.140188, 0.0152937, 0.976525)
+bones/11/rotation = Quaternion(0.306914, -0.00746434, 0.155674, 0.93889)
+bones/12/rotation = Quaternion(-0.00731713, 0.000656479, 0.00119919, 0.999972)
+bones/13/rotation = Quaternion(-0.0246871, -4.57e-08, -0.00962135, 0.999649)
+bones/15/rotation = Quaternion(0.0326866, -0.00582942, 0.0611081, 0.997579)
+bones/16/rotation = Quaternion(0.142793, -0.000706429, -0.00670097, 0.98973)
+bones/17/rotation = Quaternion(-0.0157757, 1.06907e-07, 0.00190386, 0.999874)
+bones/19/rotation = Quaternion(0.12464, 0.00600518, -0.0856499, 0.98848)
+bones/20/rotation = Quaternion(0.1897, -0.00135849, 0.0143228, 0.981737)
+bones/21/rotation = Quaternion(-0.0157757, -3.62878e-08, 0.00190375, 0.999874)
+bones/23/rotation = Quaternion(0.264958, -0.0132653, -0.130863, 0.955247)
+bones/24/rotation = Quaternion(0.275556, 0.00205042, 0.0239018, 0.960986)
+bones/25/rotation = Quaternion(-0.0157757, 2.8426e-08, 0.00190392, 0.999874)
+bones/27/rotation = Quaternion(0.290924, -0.0139966, -0.163954, 0.942489)
+bones/28/rotation = Quaternion(0.336172, 0.0113629, 0.0494279, 0.940434)
+bones/29/rotation = Quaternion(-0.0157756, -4.48661e-08, 0.0019041, 0.999874)
+bones/31/rotation = Quaternion(0.550592, -0.476841, 0.538108, 0.424159)
+bones/32/rotation = Quaternion(0.489279, 0.0496519, 0.0989527, 0.865072)
+bones/33/rotation = Quaternion(0.0447349, 0.0290773, -0.35979, 0.931506)
+bones/34/rotation = Quaternion(0.106751, -0.0645531, -0.100996, 0.987034)
+bones/35/rotation = Quaternion(0.231177, 0.14274, -0.200202, 0.94133)
+bones/36/rotation = Quaternion(-0.041084, 0.00165165, 0.178559, 0.98307)
+bones/37/rotation = Quaternion(-0.0204514, 4.91862e-08, -0.00642922, 0.99977)
+bones/39/rotation = Quaternion(0.0395806, 0.00988685, 0.0103176, 0.999114)
+bones/40/rotation = Quaternion(0.147267, 0.000641041, 0.00962796, 0.98905)
+bones/41/rotation = Quaternion(-0.0448751, -6.50484e-08, -0.00546873, 0.998978)
+bones/43/rotation = Quaternion(0.110986, 0.00854429, 0.0246295, 0.99348)
+bones/44/rotation = Quaternion(0.263536, 0.00189935, -0.0172281, 0.964494)
+bones/45/rotation = Quaternion(-0.044875, -5.06212e-08, -0.00546883, 0.998978)
+bones/47/rotation = Quaternion(0.187011, -0.00859723, 0.0673528, 0.980008)
+bones/48/rotation = Quaternion(0.320479, -0.00270816, -0.0336855, 0.946653)
+bones/49/rotation = Quaternion(-0.044875, -5.61559e-08, -0.00546882, 0.998978)
+bones/51/rotation = Quaternion(0.207173, -0.0112235, 0.0920253, 0.973902)
+bones/52/rotation = Quaternion(0.349214, -0.0126834, -0.0688342, 0.934426)
+bones/53/rotation = Quaternion(-0.044875, -1.04569e-08, -0.00546887, 0.998978)
+bones/55/rotation = Quaternion(0.0785255, 0.218801, 0.966674, -0.107241)
+bones/56/rotation = Quaternion(-0.314347, 0.119168, -0.0407784, 0.940915)
+bones/57/rotation = Quaternion(0.578925, -0.023201, -0.0312085, 0.814453)
+bones/58/rotation = Quaternion(0.247894, -0.0182689, -0.0402085, 0.96778)
+bones/60/rotation = Quaternion(-0.124602, 0.0251073, 0.983566, 0.128224)
+bones/61/rotation = Quaternion(-0.310494, 0.0752233, -0.018644, 0.947411)
+bones/62/rotation = Quaternion(0.682965, 0.0702902, 0.0979173, 0.720437)
+bones/63/rotation = Quaternion(0.242804, 0.0356907, 0.012723, 0.969335)
+
+[node name="AnimationPlayer" parent="Model/Root Scene" index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_u0ocb"),
+"PlayerAnimations": ExtResource("6_3gftg")
+}
+blend_times = [&"PlayerAnimations/JumpIdle", &"PlayerAnimations/JumpFallToLanding", 0.1, &"PlayerAnimations/JumpIdle", &"PlayerAnimations/FallingHard", 1.0, &"PlayerAnimations/idle(3)", &"PlayerAnimations/running", 0.3, &"PlayerAnimations/idle(3)", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/idle(3)", &"PlayerAnimations/walking", 0.3, &"PlayerAnimations/running", &"PlayerAnimations/idle(3)", 0.3, &"PlayerAnimations/running", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/running", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/running", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/running", &"PlayerAnimations/idle", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/idle(3)", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/idle", 0.1, &"PlayerAnimations/FallingHard", &"PlayerAnimations/JumpIdle", 0.5, &"PlayerAnimations/FallingHard", &"PlayerAnimations/FallingFlat", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/idle(3)", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/running", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/walking", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/idle", 0.3, &"PlayerAnimations/JumpStart", &"PlayerAnimations/JumpIdle", 0.5, &"PlayerAnimations/JumpStart", &"PlayerAnimations/JumpFallToLanding", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/idle(3)", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/walking", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/idle", 0.5, &"PlayerAnimations/FallingFlat", &"PlayerAnimations/StandingUp", 0.35]
+
+[node name="AnimationTree" type="AnimationTree" parent="Model"]
+tree_root = SubResource("AnimationRootNode_m32bs")
+
+[node name="CameraMount" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.40036, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraMount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.464797, 2.34048)
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("current_state")]
+script = ExtResource("6_1yhs6")
+current_state = NodePath("PlayerIdleState")
+
+[node name="PlayerState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("5_vx5xm")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerIdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("8_1twqs")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerWalkState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("9_dfbad")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerSprintState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("9_r54yf")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerAtackingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("10_s6dwn")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerFallingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("11_yvgpv")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerJumpState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("12_02ylv")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerLandingState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("13_yjpwx")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerLandHardState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("12_f4m4h")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="PlayerRecoverFallState" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animator")]
+script = ExtResource("13_2qixx")
+player = NodePath("../..")
+animator = NodePath("../../Model/Root Scene/AnimationPlayer")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_ufwhi")
+
+[node name="Input" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_bkfc4")
+
+[editable path="Model/Root Scene"]

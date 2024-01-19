@@ -1,0 +1,164 @@
+[gd_scene load_steps=14 format=3 uid="uid://bcy21smmw4hc2"]
+
+[ext_resource type="Material" uid="uid://crpd0gxld5jlq" path="res://Materials/CheckerPatternMaterial.tres" id="1_ngcel"]
+[ext_resource type="Script" path="res://Scripts/test_level.gd" id="1_svmjb"]
+[ext_resource type="PackedScene" uid="uid://c3d46jqv5eejm" path="res://GameScenes/player.tscn" id="2_wmv2v"]
+[ext_resource type="PackedScene" uid="uid://fqkesowvviy4" path="res://TestingScenes/prototype_tester.tscn" id="3_l5smv"]
+[ext_resource type="Material" uid="uid://b7wbe146nvxrf" path="res://Materials/GreenCrossTiles.tres" id="5_6c4qu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qkna8"]
+sky_top_color = Color(0.254902, 0.654902, 0.870588, 1)
+sky_horizon_color = Color(0.945098, 0.94902, 0.94902, 1)
+
+[sub_resource type="Sky" id="Sky_c1hqj"]
+sky_material = SubResource("ProceduralSkyMaterial_qkna8")
+
+[sub_resource type="Environment" id="Environment_yj13y"]
+background_mode = 2
+sky = SubResource("Sky_c1hqj")
+ambient_light_source = 3
+ambient_light_color = Color(0.807843, 0.807843, 0.807843, 1)
+ambient_light_energy = 14.25
+glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+
+[sub_resource type="Gradient" id="Gradient_rsk0e"]
+offsets = PackedFloat32Array(0, 0.435294, 1)
+colors = PackedColorArray(0, 0.854902, 1, 0.329412, 0, 0.100973, 0.11811, 0.11811, 0, 0.854902, 1, 0.376471)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5ubhu"]
+gradient = SubResource("Gradient_rsk0e")
+fill_to = Vector2(0, 0.393162)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3yyi"]
+transparency = 1
+albedo_texture = SubResource("GradientTexture2D_5ubhu")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3l3jf"]
+material = SubResource("StandardMaterial3D_t3yyi")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 4.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vsl76"]
+height = 4.0
+radius = 1.0
+
+[node name="TestLevel" type="Node"]
+script = ExtResource("1_svmjb")
+PlayerScene = ExtResource("2_wmv2v")
+PORT = 9999
+IP_ADRESS = &"Localhost"
+MAX_CLIENTS = 5
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://GameScenes/player.tscn")
+spawn_path = NodePath("..")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+visible = false
+use_collision = true
+size = Vector3(100, 0.5, 100)
+material = ExtResource("1_ngcel")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_yj13y")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, -0.712369, 0.701805, 0, -0.701805, -0.712369, 0, -0.170817, 0)
+
+[node name="PrototypeTester" parent="." instance=ExtResource("3_l5smv")]
+
+[node name="TopOfCylinder" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2426, 28.6669, -52.4495)
+use_collision = true
+radius = 1.0
+height = 0.329583
+material = ExtResource("5_6c4qu")
+
+[node name="TpPosition" type="Node3D" parent="TopOfCylinder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.679609, 0)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, -52)
+use_collision = true
+radius = 1.0
+height = 0.329583
+material = ExtResource("5_6c4qu")
+
+[node name="Area3D" type="Area3D" parent="CSGCylinder3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CSGCylinder3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.88927, 0)
+mesh = SubResource("CylinderMesh_3l3jf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CSGCylinder3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_vsl76")
+
+[node name="0" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6711, 1.29376, -18.4894)
+
+[node name="1" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6711, 1.29376, -18.4894)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+offset_top = 362.0
+offset_right = 388.0
+offset_bottom = 648.0
+grow_vertical = 0
+
+[node name="Host" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Host Game"
+
+[node name="Join" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Join Game"
+
+[node name="Start" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -361.0
+offset_top = -128.5
+offset_bottom = 128.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/VBoxContainer2"]
+layout_mode = 2
+text = "TEST"
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/MainMenu"]
+layout_mode = 0
+offset_top = 313.0
+offset_right = 267.0
+offset_bottom = 344.0
+placeholder_text = "ID / Name"
+
+[connection signal="body_entered" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/Start" to="." method="_on_start_pressed"]
