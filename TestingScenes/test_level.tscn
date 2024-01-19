@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://bcy21smmw4hc2"]
+[gd_scene load_steps=13 format=3 uid="uid://bcy21smmw4hc2"]
 
 [ext_resource type="Material" uid="uid://crpd0gxld5jlq" path="res://Materials/CheckerPatternMaterial.tres" id="1_ngcel"]
 [ext_resource type="Script" path="res://Scripts/test_level.gd" id="1_svmjb"]
-[ext_resource type="PackedScene" uid="uid://c3d46jqv5eejm" path="res://GameScenes/player.tscn" id="2_wmv2v"]
 [ext_resource type="PackedScene" uid="uid://fqkesowvviy4" path="res://TestingScenes/prototype_tester.tscn" id="3_l5smv"]
 [ext_resource type="Material" uid="uid://b7wbe146nvxrf" path="res://Materials/GreenCrossTiles.tres" id="5_6c4qu"]
 
@@ -47,8 +46,6 @@ radius = 1.0
 
 [node name="TestLevel" type="Node"]
 script = ExtResource("1_svmjb")
-PlayerScene = ExtResource("2_wmv2v")
-PORT = 9999
 IP_ADRESS = &"Localhost"
 MAX_CLIENTS = 5
 
@@ -94,43 +91,27 @@ mesh = SubResource("CylinderMesh_3l3jf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_vsl76")
 
-[node name="sp0" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6711, 1.29376, -18.4894)
-
-[node name="sp1" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6711, 1.29376, -18.4894)
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="MainMenu" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu"]
-layout_mode = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
 offset_top = 362.0
 offset_right = 388.0
 offset_bottom = 648.0
 grow_vertical = 0
 
-[node name="Host" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+[node name="Host" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 text = "Host Game"
 
-[node name="Join" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+[node name="Join" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 text = "Join Game"
 
-[node name="Start" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+[node name="Start" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 text = "Start"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/MainMenu"]
-layout_mode = 1
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer"]
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -142,12 +123,11 @@ offset_bottom = 128.5
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MainMenu/VBoxContainer2"]
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer2"]
 layout_mode = 2
 text = "TEST"
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/MainMenu"]
-layout_mode = 0
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer"]
 offset_top = 313.0
 offset_right = 267.0
 offset_bottom = 344.0
@@ -159,6 +139,6 @@ spawn_path = NodePath("..")
 
 [connection signal="body_entered" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_exited"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/Join" to="." method="_on_join_pressed"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Start" to="." method="_on_start_pressed"]

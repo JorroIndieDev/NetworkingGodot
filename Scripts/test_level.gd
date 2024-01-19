@@ -4,46 +4,59 @@ var player_entered: bool = false
 var player_in_area
 @onready var tp_position: Node3D = $TopOfCylinder/TpPosition
 
-@export var PlayerScene : PackedScene
+@export var PlayerScene = preload("res://GameScenes/player.tscn")
 
-@export var PORT: int;
+@export var PORT: int = 9999;
 @export var IP_ADRESS: StringName;
 @export var MAX_CLIENTS:int;
 
-@onready var canvas_layer: CanvasLayer = $CanvasLayer
+@onready var main_menu: CanvasLayer = $CanvasLayer
+@onready var address_entry: LineEdit = $CanvasLayer/LineEdit
 
-var peer = ENetMultiplayerPeer.new()
+var enet_peer = ENetMultiplayerPeer.new()
 
 
 func _ready() -> void:
 	pass
 
 func _on_host_pressed() -> void:
-	canvas_layer.hide()
+	main_menu.hide()
+#	hud.show()
 	
-	peer.create_server(PORT)
-	multiplayer.multiplayer_peer = peer
+	enet_peer.create_server(PORT)
+	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
-	print(multiplayer.get_unique_id()) #########################
+	multiplayer.peer_disconnected.connect(remove_player)
+	
 	add_player(multiplayer.get_unique_id())
 
 
 func _on_join_pressed() -> void:
-	canvas_layer.hide()
+	main_menu.hide()
+#	hud.show()
 	
-	peer.create_client("localhost", PORT)
-	multiplayer.multiplayer_peer = peer
+	enet_peer.create_client(address_entry.text, PORT)
+	multiplayer.multiplayer_peer = enet_peer
+
+func remove_player(peer_id):
+	var player = get_node_or_null(str(peer_id))
+	if player:
+		player.queue_free()
 
 
 func _on_start_pressed() -> void:
 	pass
 
-
 func add_player(peer_id):
 	var player = PlayerScene.instantiate()
 	player.name = str(peer_id)
-	call_deferred("add_child",player,true)
-	
+	add_child(player)
+
+
+
+
+
+
 func _physics_process(_delta: float) -> void:
 	if player_entered and Input.is_action_just_pressed("Interact"):
 		player_in_area.global_position = tp_position.global_position

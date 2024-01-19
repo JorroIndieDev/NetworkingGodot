@@ -24,10 +24,11 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * gravit
 
 @export var input_dir: Vector2
 @export var direction: Vector3
-func _enter_tree() -> void:
+
+func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 
-func _ready() -> void:
+func _ready():
 	if not is_multiplayer_authority(): return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 	$CameraMount/Camera3D.current = true
