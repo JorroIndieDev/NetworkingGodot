@@ -7,7 +7,8 @@ func Enter() -> void:
 	if not is_multiplayer_authority(): return
 	
 	animator.play("PlayerAnimations/StandingUp");
-	
+
+
 func Exit() -> void:
 	standing = false
 	

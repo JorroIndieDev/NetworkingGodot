@@ -4,7 +4,6 @@ extends PlayerState
 
 func Enter() -> void:
 	if not is_multiplayer_authority(): return
-	
 	animator.play("PlayerAnimations/FallingFlat");
 	
 	player.velocity.x = move_toward(
@@ -13,7 +12,7 @@ func Enter() -> void:
 	player.velocity.z = move_toward(
 		player.velocity.z, 0, player.max_speed
 		);
-	
+
 func Exit() -> void:
 	pass
 	

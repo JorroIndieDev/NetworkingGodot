@@ -6,7 +6,7 @@ func Enter() -> void:
 	if not is_multiplayer_authority(): return
 	
 	animator.play("PlayerAnimations/JumpFallToLanding");
-	
+
 func Exit() -> void:
 	pass
 	
@@ -14,6 +14,8 @@ func Update(_delta: float) -> void:
 	pass
  
 func Physics_update(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
+	
 	if player.direction:
 		transitioned.emit("PlayerWalkState");
 		
