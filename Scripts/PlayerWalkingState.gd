@@ -2,10 +2,11 @@ class_name PlayerWalkState
 extends PlayerState
 
 func Enter() -> void:
+	if not is_multiplayer_authority(): return
+	
 	animator.play("PlayerAnimations/walking");
 	
 func Exit() -> void:
-	
 	player.velocity.x = move_toward(
 		player.velocity.x, 0, player.max_speed
 		);

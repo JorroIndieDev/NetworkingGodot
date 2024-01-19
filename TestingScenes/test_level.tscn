@@ -52,10 +52,6 @@ PORT = 9999
 IP_ADRESS = &"Localhost"
 MAX_CLIENTS = 5
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://GameScenes/player.tscn")
-spawn_path = NodePath("..")
-
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 visible = false
@@ -98,10 +94,10 @@ mesh = SubResource("CylinderMesh_3l3jf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_vsl76")
 
-[node name="0" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
+[node name="sp0" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6711, 1.29376, -18.4894)
 
-[node name="1" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
+[node name="sp1" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6711, 1.29376, -18.4894)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -156,6 +152,10 @@ offset_top = 313.0
 offset_right = 267.0
 offset_bottom = 344.0
 placeholder_text = "ID / Name"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://GameScenes/player.tscn")
+spawn_path = NodePath("..")
 
 [connection signal="body_entered" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_exited"]

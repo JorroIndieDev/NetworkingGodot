@@ -14,17 +14,20 @@ func _ready():
 			push_warning("State machine contains child which is not 'State'");
 			
 	current_state.Enter();
-	print(states);
+	#print(states);
 
 func _process(delta):
+	if not is_multiplayer_authority(): return
 	if current_state:
 		current_state.Update(delta);
 
 func _physics_process(delta):
+	if not is_multiplayer_authority(): return
 	if current_state:
 		current_state.Physics_update(delta);
 
 func on_child_transitioned(new_state_name: StringName) -> void:
+	if not is_multiplayer_authority(): return
 	var new_state = states.get(new_state_name);
 	if new_state != null:
 		if new_state != current_state:

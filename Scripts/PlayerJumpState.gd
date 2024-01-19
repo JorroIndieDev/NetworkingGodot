@@ -4,6 +4,8 @@ extends PlayerState
 var was_runing: bool = false;
 
 func Enter() -> void:
+	if not is_multiplayer_authority(): return
+	
 	animator.play("PlayerAnimations/JumpStart");
 	player.velocity.y = sqrt(player.jump_height * 3 * gravity);
 	was_runing = true if parent_node.current_state.name == "PlayerSprintState" else false;

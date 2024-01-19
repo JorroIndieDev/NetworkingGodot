@@ -23,14 +23,11 @@ extends CharacterBody3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * gravity_multiplier;
 
 @export var input_dir: Vector2
-var direction: Vector3
+@export var direction: Vector3
 func _enter_tree() -> void:
-	print(name) #####################
-	set_multiplayer_authority(multiplayer.get_unique_id())
+	set_multiplayer_authority(str(name).to_int())
 
 func _ready() -> void:
-	print(is_multiplayer_authority()) #######################
-	print(name) #####################
 	if not is_multiplayer_authority(): return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 	$CameraMount/Camera3D.current = true

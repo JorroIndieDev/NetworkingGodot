@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c3d46jqv5eejm"]
+[gd_scene load_steps=20 format=3 uid="uid://c3d46jqv5eejm"]
 
 [ext_resource type="PackedScene" uid="uid://ca5fuws85alxg" path="res://Models/Player/Y Bot.fbx" id="1_0aryk"]
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_ry55r"]
@@ -65,21 +65,13 @@ _data = {
 
 [sub_resource type="AnimationRootNode" id="AnimationRootNode_m32bs"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ufwhi"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yxdtv"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
+properties/1/path = NodePath("Model/Root Scene/AnimationPlayer:current_animation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath("Model/Root Scene/AnimationPlayer:current_animation")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bkfc4"]
-properties/0/path = NodePath(".:input_dir")
-properties/0/spawn = true
-properties/0/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("animationPlayer")]
 collision_layer = 2
@@ -156,7 +148,7 @@ libraries = {
 "": SubResource("AnimationLibrary_u0ocb"),
 "PlayerAnimations": ExtResource("6_3gftg")
 }
-blend_times = [&"PlayerAnimations/JumpIdle", &"PlayerAnimations/JumpFallToLanding", 0.1, &"PlayerAnimations/JumpIdle", &"PlayerAnimations/FallingHard", 1.0, &"PlayerAnimations/idle(3)", &"PlayerAnimations/running", 0.3, &"PlayerAnimations/idle(3)", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/idle(3)", &"PlayerAnimations/walking", 0.3, &"PlayerAnimations/running", &"PlayerAnimations/idle(3)", 0.3, &"PlayerAnimations/running", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/running", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/running", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/running", &"PlayerAnimations/idle", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/idle(3)", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/idle", 0.1, &"PlayerAnimations/FallingHard", &"PlayerAnimations/JumpIdle", 0.5, &"PlayerAnimations/FallingHard", &"PlayerAnimations/FallingFlat", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/idle(3)", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/running", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/walking", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/idle", 0.3, &"PlayerAnimations/JumpStart", &"PlayerAnimations/JumpIdle", 0.5, &"PlayerAnimations/JumpStart", &"PlayerAnimations/JumpFallToLanding", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/idle(3)", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/walking", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/idle", 0.5, &"PlayerAnimations/FallingFlat", &"PlayerAnimations/StandingUp", 0.35]
+blend_times = [&"PlayerAnimations/StandingUp", &"PlayerAnimations/walking", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/running", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/idle(3)", 0.3, &"PlayerAnimations/StandingUp", &"PlayerAnimations/idle", 0.3, &"PlayerAnimations/JumpStart", &"PlayerAnimations/JumpFallToLanding", 0.5, &"PlayerAnimations/JumpStart", &"PlayerAnimations/JumpIdle", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/walking", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/idle(3)", 0.5, &"PlayerAnimations/walking", &"PlayerAnimations/idle", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/idle(3)", 0.5, &"PlayerAnimations/JumpFallToLanding", &"PlayerAnimations/idle", 0.1, &"PlayerAnimations/running", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/running", &"PlayerAnimations/walking", 0.5, &"PlayerAnimations/running", &"PlayerAnimations/running", 0.5, &"PlayerAnimations/running", &"PlayerAnimations/idle(3)", 0.3, &"PlayerAnimations/running", &"PlayerAnimations/idle", 0.5, &"PlayerAnimations/idle(3)", &"PlayerAnimations/JumpStart", 0.1, &"PlayerAnimations/idle(3)", &"PlayerAnimations/walking", 0.3, &"PlayerAnimations/idle(3)", &"PlayerAnimations/running", 0.3, &"PlayerAnimations/JumpIdle", &"PlayerAnimations/JumpFallToLanding", 0.1, &"PlayerAnimations/JumpIdle", &"PlayerAnimations/FallingHard", 1.0, &"PlayerAnimations/FallingHard", &"PlayerAnimations/JumpIdle", 0.5, &"PlayerAnimations/FallingHard", &"PlayerAnimations/FallingFlat", 0.3, &"PlayerAnimations/FallingFlat", &"PlayerAnimations/StandingUp", 0.35]
 
 [node name="AnimationTree" type="AnimationTree" parent="Model"]
 tree_root = SubResource("AnimationRootNode_m32bs")
@@ -222,9 +214,6 @@ player = NodePath("../..")
 animator = NodePath("../../Model/Root Scene/AnimationPlayer")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_ufwhi")
-
-[node name="Input" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_bkfc4")
+replication_config = SubResource("SceneReplicationConfig_yxdtv")
 
 [editable path="Model/Root Scene"]

@@ -3,6 +3,8 @@ extends PlayerState
 
 
 func Enter() -> void:
+	if not is_multiplayer_authority(): return
+	
 	animator.play("PlayerAnimations/FallingFlat");
 	
 	player.velocity.x = move_toward(
@@ -19,7 +21,6 @@ func Update(_delta: float) -> void:
 	pass
  
 func Physics_update(_delta: float) -> void:
-	
 	transitioned.emit("PlayerRecoverFallState");
 
 

@@ -2,6 +2,8 @@ class_name PlayerSprintState
 extends PlayerState
 
 func Enter() -> void:
+	if not is_multiplayer_authority(): return
+	
 	animator.play("PlayerAnimations/running");
 	
 func Exit() -> void:

@@ -2,6 +2,8 @@ class_name PlayerIdleState
 extends PlayerState
 
 func Enter() -> void:
+	if not is_multiplayer_authority(): return
+	
 	animator.play("PlayerAnimations/idle(3)");
 	
 	player.velocity.x = move_toward(

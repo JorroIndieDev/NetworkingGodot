@@ -10,15 +10,19 @@ extends State
 var speed_multiplier: float;
 
 func Enter() -> void:
+	if not is_multiplayer_authority(): return
 	pass
 	
 func Exit() -> void:
+	if not is_multiplayer_authority(): return
 	pass
 	
 func Update(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
 	pass
 	
 func Physics_update(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
 	pass
 
 func Moving_Player(sprint: bool) -> void:

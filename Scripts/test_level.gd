@@ -42,7 +42,6 @@ func _on_start_pressed() -> void:
 func add_player(peer_id):
 	var player = PlayerScene.instantiate()
 	player.name = str(peer_id)
-	print(player.name) ######################
 	call_deferred("add_child",player,true)
 	
 func _physics_process(_delta: float) -> void:
@@ -51,6 +50,7 @@ func _physics_process(_delta: float) -> void:
 
 func _on_area_3d_body_entered(body: Node3D) -> void: # needed to implement for two players or more
 	if body is Player:
+		print("Player Entered")
 		player_entered = true
 		player_in_area = body
 
