@@ -6,8 +6,6 @@ Note to try and remove the synchronizers and add everything by rpc
 class_name Player
 extends CharacterBody3D
 
-signal color_change(color_value)
-
 @onready var camera_mount: Node3D = $CameraMount;
 @onready var model: Node3D = $Model;
 @onready var state_machine: StateMachine = $StateMachine
@@ -70,9 +68,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			camera_mount.rotation.x, deg_to_rad(-90), deg_to_rad(45));
 
 func _process(_delta: float) -> void:
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	#if player_ui.visible:
 		#rpc("set_color",color_picker.color)
+	pass
 
 func _physics_process(delta) -> void:
 	if not is_multiplayer_authority(): return
@@ -87,10 +86,7 @@ func _physics_process(delta) -> void:
 		velocity.y -= gravity * delta;
 	move_and_slide();
 
-@rpc("authority","call_local","reliable",1)
+@rpc("authority","call_local","reliable")
 func set_color(color):
-	if not is_multiplayer_authority(): return
+	print( "Colour change from " + str( multiplayer.get_remote_sender_id() ) + " to " + str( multiplayer.get_unique_id() ) )
 	body_mesh_material.albedo_color = color
-
-func _on_color_picker_color_changed(color: Color) -> void:
-	emit_signal("color_change",color)

@@ -39,7 +39,7 @@ func _on_host_pressed() -> void:
 	enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
 	#add_player(1)
 	add_player_character(1)
-	enet_peer.peer_connected.connect(
+	multiplayer.peer_connected.connect(
 		func(new_peer_id):
 			await get_tree().create_timer(1).timeout
 			rpc("add_newly_connected_player_character", new_peer_id)
