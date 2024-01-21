@@ -72,6 +72,7 @@ func _on_start_pressed() -> void:
 	#add_child(player)
 	#if peer_id == multiplayer.get_unique_id():
 		#local_player_character = player
+
 func add_player_character(peer_id):
 	connected_peer_ids.append(peer_id)
 	var player_character = PlayerScene.instantiate()
@@ -125,7 +126,7 @@ func _on_area_3d_body_exited(body) -> void: # same
 	if body is Player:
 		player_entered = false
 		
-
+#test_level.gd / the main world scene
 func _on_color_picker_color_changed(color: Color) -> void: # signal from color picker on the "main" scene
 	for connected_peer in connected_peer_ids:
 		if connected_peer != local_player_character.multiplayer.get_unique_id():

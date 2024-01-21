@@ -38,7 +38,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * gravit
 func _enter_tree():
 	name = str(get_multiplayer_authority())
 	multiplayerID = str(name).to_int()
-	print("multiplayerID ",multiplayerID)
+	print("multiplayerID ",multiplayerID) # player.gd
 	$IDTag.text = str(name)
 	$NameTag.text = GameManager.Players[multiplayerID].Pname
 
@@ -51,9 +51,7 @@ func _ready():
 	$CameraMount/Camera3D.current = true
 	print("GameManager.Players ",GameManager.Players)
 	await get_tree().create_timer(1).timeout
-	#set_name_tag.rpc(GameManager.Players[multiplayerID].Pname,str(multiplayerID))
-	#$NameTag.text = GameManager.Players[multiplayerID].Pname
-	#id_tag.text = str(name)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
@@ -91,7 +89,7 @@ func _physics_process(delta) -> void:
 	move_and_slide();
 
 
-func applyData(id,color):
+func applyData(id,color): # player.gd
 	#if id != multiplayer.get_unique_id(): return
 	#body_mesh_material.albedo_color = color
 	rpc("color_rpc_",color)
@@ -101,7 +99,9 @@ func applyData(id,color):
 @rpc("any_peer", "call_local", "reliable",0)
 func color_rpc_(color):
 	body_mesh_material.albedo_color = color
-	print( "color_rpc_ sent from " + str( multiplayer.get_remote_sender_id() ) + " to " + str( multiplayer.get_unique_id() ) )
+	print( "color_rpc_ sent from " + str( 
+		multiplayer.get_remote_sender_id() ) + " to " + str( multiplayer.get_unique_id() ) 
+		)
 
 @rpc("unreliable")
 func remote_set_position(authority_position):
