@@ -36,8 +36,8 @@ func _on_host_pressed() -> void:
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_disconnected.connect(remove_player)
 	enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-	add_player_character(1)
 	SendPlayerInformation(player_name.text,multiplayer.get_unique_id())
+	add_player_character(1)
 	enet_peer.peer_connected.connect(
 		func(new_peer_id):
 			await get_tree().create_timer(1).timeout
@@ -126,15 +126,14 @@ func _on_area_3d_body_exited(body) -> void: # same
 		player_entered = false
 		
 
-func _on_color_picker_color_changed(color: Color) -> void:
-	local_player_character.rpc("set_color",color)
+func _on_color_picker_color_changed(color: Color) -> void: # signal from color picker on the "main" scene
 	for connected_peer in connected_peer_ids:
 		if connected_peer != local_player_character.multiplayer.get_unique_id():
 			var otherPeer = get_node_or_null(str(connected_peer))
-			otherPeer.body_mesh_material.albedo_color = color
+			#otherPeer.body_mesh_material.albedo_color = color
 			print("OtherPeersConnected ", otherPeer)
-			UpdatePlayerInformation.rpc(connected_peer,color)
-	local_player_character.body_mesh_material.albedo_color = color
+			UpdatePlayerInformation.rpc(local_player_character.multiplayer.get_unique_id(),color)
+	#local_player_character.body_mesh_material.albedo_color = color
 
 @rpc("any_peer")
 func SendPlayerInformation(Name,id,color: Color = Color(1,1,1,1)):
@@ -150,7 +149,7 @@ func SendPlayerInformation(Name,id,color: Color = Color(1,1,1,1)):
 			SendPlayerInformation.rpc(GameManager.Players[i].Pname,i)
 
 @rpc("any_peer")
-func UpdatePlayerInformation(id,color: Color = Color(1,1,1,1)):
+func UpdatePlayerInformation(id,color):
 	if GameManager.Players.has(id):
 		GameManager.Players[id].color = color
 		if multiplayer.is_server():
