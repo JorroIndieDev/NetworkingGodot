@@ -12,6 +12,8 @@ extends CharacterBody3D
 
 @onready var body_mesh: MeshInstance3D = $"Model/Root Scene/RootNode/Skeleton3D/Alpha_Surface"
 @onready var body_mesh_material: StandardMaterial3D = StandardMaterial3D.new()
+@onready var name_tag: Label3D = $NameTag
+@onready var id_tag: Label3D = $IDTag
 
 @export var animationPlayer: AnimationPlayer;
 @export var Name: String
@@ -36,6 +38,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * gravit
 func _enter_tree():
 	name = str(get_multiplayer_authority())
 	multiplayerID = str(name).to_int()
+	print("multiplayerID ",multiplayerID)
 
 func _ready():
 	if not is_multiplayer_authority(): return
@@ -44,12 +47,10 @@ func _ready():
 	body_mesh_material.albedo_color = Color(1,1,1,1)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 	$CameraMount/Camera3D.current = true
-	print(GameManager.Players)
+	print("GameManager.Players ",GameManager.Players)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
-	#if Input.is_action_just_pressed("ui_cancel"):
-		#player_ui.visible = !player_ui.visible
 		
 	if (event is InputEventMouseMotion) and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED):
 		
@@ -68,9 +69,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			camera_mount.rotation.x, deg_to_rad(-90), deg_to_rad(45));
 
 func _process(_delta: float) -> void:
-	#if not is_multiplayer_authority(): return
-	#if player_ui.visible:
-		#rpc("set_color",color_picker.color)
 	pass
 
 func _physics_process(delta) -> void:
@@ -86,7 +84,24 @@ func _physics_process(delta) -> void:
 		velocity.y -= gravity * delta;
 	move_and_slide();
 
-@rpc("authority","call_local","reliable")
+func local_set_color(color):
+	#body_mesh_material.albedo_color = color
+	#print("body_mesh_material ",body_mesh_material)
+	#print(str(body_mesh_material.albedo_color) + " Recieved: " + str( multiplayer.get_unique_id() ) + " from " + str( multiplayer.get_remote_sender_id() ))
+	pass
+
+func applyData(id,color: Color = Color(1,1,1,1)):
+	if not is_multiplayer_authority(): return
+	body_mesh_material.albedo_color = color
+	print("applyData: ID: ",id," Color: ",color)
+	
+
+@rpc("unreliable")
+func remote_set_position(authority_position):
+	global_position = authority_position
+	
+@rpc("authority","call_local","unreliable",1)
 func set_color(color):
 	print( "Colour change from " + str( multiplayer.get_remote_sender_id() ) + " to " + str( multiplayer.get_unique_id() ) )
-	body_mesh_material.albedo_color = color
+	local_set_color(color)
+	#body_mesh_material.albedo_color = color

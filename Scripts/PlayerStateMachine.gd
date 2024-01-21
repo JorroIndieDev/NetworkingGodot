@@ -45,3 +45,4 @@ func Moving_Player(sprint: bool) -> void:
 		player.velocity.z = move_toward(
 			player.velocity.z, 0, player.max_speed
 			);
+	player.rpc("remote_set_position", player.global_position)

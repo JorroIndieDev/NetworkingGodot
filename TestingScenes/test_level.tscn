@@ -156,9 +156,6 @@ offset_right = 267.0
 offset_bottom = 311.0
 placeholder_text = "Name"
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("..")
-
 [connection signal="body_entered" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_exited"]
 [connection signal="color_changed" from="PlayerUI/ColorPicker" to="." method="_on_color_picker_color_changed"]

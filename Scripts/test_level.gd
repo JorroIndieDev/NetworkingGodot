@@ -16,9 +16,11 @@ var player_in_area
 @onready var player_ui: CanvasLayer = $PlayerUI
 @onready var network: Label = $CanvasLayer2/Network
 
+
 var enet_peer = ENetMultiplayerPeer.new()
 var local_player_character
 var connected_peer_ids = []
+
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected);
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected);
@@ -29,17 +31,14 @@ func _ready() -> void:
 func _on_host_pressed() -> void:
 	network.text = "Host"
 	main_menu.hide()
-#	hud.show()
 	
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
-	#multiplayer.peer_connected.connect(add_player)add_player_character
-	#multiplayer.peer_connected.connect(add_player_character)
 	multiplayer.peer_disconnected.connect(remove_player)
 	enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-	#add_player(1)
 	add_player_character(1)
-	multiplayer.peer_connected.connect(
+	SendPlayerInformation(player_name.text,multiplayer.get_unique_id())
+	enet_peer.peer_connected.connect(
 		func(new_peer_id):
 			await get_tree().create_timer(1).timeout
 			rpc("add_newly_connected_player_character", new_peer_id)
@@ -80,14 +79,6 @@ func add_player_character(peer_id):
 	add_child(player_character)
 	if peer_id == multiplayer.get_unique_id():
 		local_player_character = player_character
-@rpc
-func add_newly_connected_player_character(new_peer_id):
-	add_player_character(new_peer_id)
-	
-@rpc
-func add_previously_connected_player_characters(peer_ids):
-	for peer_id in peer_ids:
-		add_player_character(peer_id)
 
 ## called on the server and clients
 func _on_peer_connected(id):
@@ -110,23 +101,13 @@ func _on_connected_fail():
 func _on_server_disconnected():
 	print("Server Down");
 
-@rpc("any_peer")
-func SendPlayerInformation(Name,id):
-	if !GameManager.Players.has(id):
-		GameManager.Players[id]={
-			"Pname" : Name,
-			"id" : id
-		}
-	
-	if multiplayer.is_server():
-		for i in GameManager.Players:
-			SendPlayerInformation.rpc(GameManager.Players[i].Pname,i)
 
 '''
 	Code above is for networking 
 	Code bellow manages the world
+	And @rpc calls
 '''
-func _unhandled_input(event: InputEvent) -> void:
+func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		player_ui.visible = !player_ui.visible
 
@@ -147,3 +128,41 @@ func _on_area_3d_body_exited(body) -> void: # same
 
 func _on_color_picker_color_changed(color: Color) -> void:
 	local_player_character.rpc("set_color",color)
+	for connected_peer in connected_peer_ids:
+		if connected_peer != local_player_character.multiplayer.get_unique_id():
+			var otherPeer = get_node_or_null(str(connected_peer))
+			otherPeer.body_mesh_material.albedo_color = color
+			print("OtherPeersConnected ", otherPeer)
+			UpdatePlayerInformation.rpc(connected_peer,color)
+	local_player_character.body_mesh_material.albedo_color = color
+
+@rpc("any_peer")
+func SendPlayerInformation(Name,id,color: Color = Color(1,1,1,1)):
+	if !GameManager.Players.has(id):
+		GameManager.Players[id]={
+			"Pname" : Name,
+			"id" : id,
+			"color" : color
+		}
+	
+	if multiplayer.is_server():
+		for i in GameManager.Players:
+			SendPlayerInformation.rpc(GameManager.Players[i].Pname,i)
+
+@rpc("any_peer")
+func UpdatePlayerInformation(id,color: Color = Color(1,1,1,1)):
+	if GameManager.Players.has(id):
+		GameManager.Players[id].color = color
+		if multiplayer.is_server():
+			for i in GameManager.Players:
+				UpdatePlayerInformation.rpc(GameManager.Players[i].id, GameManager.Players[i].color)
+		get_node_or_null(str(id)).applyData(id, color)
+
+@rpc
+func add_newly_connected_player_character(new_peer_id):
+	add_player_character(new_peer_id)
+	
+@rpc
+func add_previously_connected_player_characters(peer_ids):
+	for peer_id in peer_ids:
+		add_player_character(peer_id)
