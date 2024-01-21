@@ -1,10 +1,19 @@
+'''
+
+Note to try and remove the synchronizers and add everything by rpc
+
+'''
 class_name Player
 extends CharacterBody3D
+
+signal color_change(color_value)
 
 @onready var camera_mount: Node3D = $CameraMount;
 @onready var model: Node3D = $Model;
 @onready var state_machine: StateMachine = $StateMachine
-#@onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
+
+@onready var body_mesh: MeshInstance3D = $"Model/Root Scene/RootNode/Skeleton3D/Alpha_Surface"
+@onready var body_mesh_material: StandardMaterial3D = StandardMaterial3D.new()
 
 @export var animationPlayer: AnimationPlayer;
 @export var Name: String
@@ -24,18 +33,26 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * gravit
 
 @export var input_dir: Vector2
 @export var direction: Vector3
+@onready var multiplayerID
 
 func _enter_tree():
-	set_multiplayer_authority(str(name).to_int())
+	name = str(get_multiplayer_authority())
+	multiplayerID = str(name).to_int()
 
 func _ready():
 	if not is_multiplayer_authority(): return
+	body_mesh.set_surface_override_material(0,StandardMaterial3D.new())
+	body_mesh_material = body_mesh.get_active_material(0)
+	body_mesh_material.albedo_color = Color(1,1,1,1)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 	$CameraMount/Camera3D.current = true
+	print(GameManager.Players)
 
-func _input(event) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
-	
+	#if Input.is_action_just_pressed("ui_cancel"):
+		#player_ui.visible = !player_ui.visible
+		
 	if (event is InputEventMouseMotion) and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED):
 		
 		rotate_y(
@@ -52,6 +69,10 @@ func _input(event) -> void:
 		camera_mount.rotation.x = clamp(
 			camera_mount.rotation.x, deg_to_rad(-90), deg_to_rad(45));
 
+func _process(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
+	#if player_ui.visible:
+		#rpc("set_color",color_picker.color)
 
 func _physics_process(delta) -> void:
 	if not is_multiplayer_authority(): return
@@ -65,3 +86,11 @@ func _physics_process(delta) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta;
 	move_and_slide();
+
+@rpc("authority","call_local","reliable",1)
+func set_color(color):
+	if not is_multiplayer_authority(): return
+	body_mesh_material.albedo_color = color
+
+func _on_color_picker_color_changed(color: Color) -> void:
+	emit_signal("color_change",color)

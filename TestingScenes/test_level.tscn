@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bcy21smmw4hc2"]
+[gd_scene load_steps=14 format=3 uid="uid://bcy21smmw4hc2"]
 
 [ext_resource type="Material" uid="uid://crpd0gxld5jlq" path="res://Materials/CheckerPatternMaterial.tres" id="1_ngcel"]
 [ext_resource type="Script" path="res://Scripts/test_level.gd" id="1_svmjb"]
 [ext_resource type="PackedScene" uid="uid://fqkesowvviy4" path="res://TestingScenes/prototype_tester.tscn" id="3_l5smv"]
 [ext_resource type="Material" uid="uid://b7wbe146nvxrf" path="res://Materials/GreenCrossTiles.tres" id="5_6c4qu"]
+[ext_resource type="PackedScene" uid="uid://bayrqqo1yh4uy" path="res://GameScenes/player_ui.tscn" id="5_rbatm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qkna8"]
 sky_top_color = Color(0.254902, 0.654902, 0.870588, 1)
@@ -75,21 +76,37 @@ material = ExtResource("5_6c4qu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.679609, 0)
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, -52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, -0.159509, -52)
 use_collision = true
 radius = 1.0
 height = 0.329583
 material = ExtResource("5_6c4qu")
 
 [node name="Area3D" type="Area3D" parent="CSGCylinder3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0818963, 0)
+collision_mask = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CSGCylinder3D/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.88927, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1674, 0.00757217)
 mesh = SubResource("CylinderMesh_3l3jf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CSGCylinder3D/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_vsl76")
+
+[node name="PlayerUI" parent="." instance=ExtResource("5_rbatm")]
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="Network" type="Label" parent="CanvasLayer2"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -127,18 +144,26 @@ grow_vertical = 2
 layout_mode = 2
 text = "TEST"
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer"]
+[node name="IP" type="LineEdit" parent="CanvasLayer"]
 offset_top = 313.0
 offset_right = 267.0
 offset_bottom = 344.0
-placeholder_text = "ID / Name"
+placeholder_text = "IP - to connect"
+
+[node name="Name" type="LineEdit" parent="CanvasLayer"]
+offset_top = 280.0
+offset_right = 267.0
+offset_bottom = 311.0
+placeholder_text = "Name"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://GameScenes/player.tscn")
 spawn_path = NodePath("..")
 
 [connection signal="body_entered" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="CSGCylinder3D/Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="color_changed" from="PlayerUI/ColorPicker" to="." method="_on_color_picker_color_changed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+
+[editable path="PlayerUI"]

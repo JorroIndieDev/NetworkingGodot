@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bayrqqo1yh4uy"]
+
+[node name="PlayerUI" type="CanvasLayer"]
+visible = false
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ColorPicker" type="ColorPicker" parent="."]
+offset_top = 338.0
+offset_right = 298.0
+offset_bottom = 638.0
+deferred_mode = true
+picker_shape = 2
+can_add_swatches = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
